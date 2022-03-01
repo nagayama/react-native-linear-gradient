@@ -11,7 +11,7 @@ const convertPoint = (name, point) => {
   if (Array.isArray(point)) {
     console.warn(
       `LinearGradient '${name}' property should be an object with fields 'x' and 'y', ` +
-      'Array type is deprecated.'
+        'Array type is deprecated.'
     );
   }
   // TODO: Update Android native code to receive a {x, y} object, not an array
@@ -57,8 +57,10 @@ export default class LinearGradient extends Component<Props> {
       ...otherProps
     } = this.props;
 
-    if ((colors && locations) && (colors.length !== locations.length)) {
-      console.warn('LinearGradient colors and locations props should be arrays of the same length');
+    if (colors && locations && colors.length !== locations.length) {
+      console.warn(
+        'LinearGradient colors and locations props should be arrays of the same length'
+      );
     }
 
     // inherit container borderRadius until this issue is resolved:
@@ -77,24 +79,26 @@ export default class LinearGradient extends Component<Props> {
       validRadius(flatStyle.borderBottomRightRadius),
       validRadius(flatStyle.borderBottomRightRadius),
       validRadius(flatStyle.borderBottomLeftRadius),
-      validRadius(flatStyle.borderBottomLeftRadius)
+      validRadius(flatStyle.borderBottomLeftRadius),
     ];
 
     return (
-      <View ref={(component) => { this.gradientRef = component; }} {...otherProps} style={style}>
-        <NativeLinearGradient
-          style={{position: 'absolute', top: 0, left: 0, bottom: 0, right: 0}}
-          colors={colors.map(processColor)}
-          startPoint={convertPoint('start', start)}
-          endPoint={convertPoint('end', end)}
-          locations={locations ? locations.slice(0, colors.length) : null}
-          useAngle={useAngle}
-          angleCenter={convertPoint('angleCenter', angleCenter)}
-          angle={angle}
-          borderRadii={borderRadiiPerCorner}
-        />
-        { children }
-      </View>
+      <NativeLinearGradient
+        ref={(component) => {
+          this.gradientRef = component;
+        }}
+        {...otherProps}
+        style={style}
+        style={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0 }}
+        colors={colors.map(processColor)}
+        startPoint={convertPoint('start', start)}
+        endPoint={convertPoint('end', end)}
+        locations={locations ? locations.slice(0, colors.length) : null}
+        useAngle={useAngle}
+        angleCenter={convertPoint('angleCenter', angleCenter)}
+        angle={angle}
+        borderRadii={borderRadiiPerCorner}
+      />
     );
   }
 }
